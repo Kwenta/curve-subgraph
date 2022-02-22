@@ -7,11 +7,11 @@
     "auth": "graph auth https://api.thegraph.com/deploy/",
     "build": "graph build",
     "codegen": "graph codegen",
-    "deploy": "graph deploy --product hosted-service curvefi/curve"
+    "deploy": "graph deploy --product hosted-service kmeraz/curvefi-subgraph"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.21.1",
-    "@graphprotocol/graph-ts": "0.20.1",
+    "@graphprotocol/graph-cli": "^0.26.0",
+    "@graphprotocol/graph-ts": "^0.24.1",
     "@protofire/subgraph-toolkit": "0.1.2"
   }
 }

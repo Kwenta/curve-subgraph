@@ -39,11 +39,6 @@ type Account @entity {
   "  "
   gaugeWeightVotes: [GaugeWeightVote!] @derivedFrom(field: "user")
 
-  " Proposal created by this account "
-  proposals: [Proposal!] @derivedFrom(field: "creator")
-
-  "  "
-  proposalVotes: [ProposalVote!] @derivedFrom(field: "voter")
 }
 
 type Contract @entity {
@@ -313,75 +308,8 @@ type Token @entity {
   underlyingCoins: [UnderlyingCoin!] @derivedFrom(field: "token")
 }
 
-interface TradeVolume @entity {
-  pool: Pool!
-  timestamp: BigInt!
-  volume: BigDecimal!
-}
-
-type DailyVolume implements TradeVolume @entity {
-  id: ID!
-  pool: Pool!
-  timestamp: BigInt!
-  volume: BigDecimal!
-}
-
-type HourlyVolume implements TradeVolume @entity {
-  id: ID!
-  pool: Pool!
-  timestamp: BigInt!
-  volume: BigDecimal!
-}
-
-type WeeklyVolume implements TradeVolume @entity {
-  id: ID!
-  pool: Pool!
-  timestamp: BigInt!
-  volume: BigDecimal!
-}
-
 interface PoolEvent @entity {
   pool: Pool!
-
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
-}
-
-type AdminFeeChangelog implements PoolEvent @entity {
-  id: ID!
-  pool: Pool!
-  value: BigDecimal!
-
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
-}
-
-type AmplificationCoeffChangelog implements PoolEvent @entity {
-  id: ID!
-  pool: Pool!
-  value: BigInt!
-
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
-}
-
-type FeeChangelog implements PoolEvent @entity {
-  id: ID!
-  pool: Pool!
-  value: BigDecimal!
-
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
-}
-
-type TransferOwnershipEvent implements PoolEvent @entity {
-  id: ID!
-  pool: Pool!
-  newAdmin: Bytes!
 
   block: BigInt!
   timestamp: BigInt!
@@ -443,144 +371,35 @@ type Exchange implements PoolEvent @entity {
   transaction: Bytes!
 }
 
-#
-# Governance
-#
-
-type VotingApp @entity {
-  " Equals to app address "
-  id: ID!
-
-  " Voting app instance "
-  address: Bytes!
-
-  " App codename "
-  codename: String!
-
-  " Minimum balance needed to create a proposal "
-  minimumBalance: BigDecimal!
-
-  " Percentage of positive votes in total possible votes for a proposal to be accepted "
-  minimumQuorum: BigDecimal!
-
-  " Minimum time needed to pass between user's previous proposal and a user creating a new proposal "
-  minimumTime: BigInt!
-
-  " Percentage of positive votes needed for a proposal to be accepted "
-  requiredSupport: BigDecimal!
-
-  " Seconds that a proposal will be open for vote (unless enough votes have been cast to make an early decision) "
-  voteTime: BigInt!
-
-  " Number of proposals created with this app "
-  proposalCount: BigInt!
-
-  " Number of votes received by all the proposals created with this app "
-  voteCount: BigInt!
-
-  " Address of the token used for voting "
-  token: Bytes!
-
-  " Proposals created through this app instance "
-  proposals: [Proposal!] @derivedFrom(field: "app")
+interface TradeVolume @entity {
+  pool: Pool!
+  timestamp: BigInt!
+  volume: BigDecimal!
 }
 
-type Proposal @entity {
+type DailyVolume implements TradeVolume @entity {
   id: ID!
-
-  " Sequential number in related to the realted voting app "
-  number: BigInt!
-
-  " Voting app instance "
-  app: VotingApp!
-
-  " Proposal creator's account "
-  creator: Account!
-
-  "  "
-  executionScript: Bytes!
-
-  "  "
-  expireDate: BigInt!
-
-  " Percentage of positive votes in total possible votes for this proposal to be accepted "
-  minimumQuorum: BigDecimal!
-
-  " Percentage of positive votes needed for this proposal to be accepted "
-  requiredSupport: BigDecimal!
-
-  "  "
-  snapshotBlock: BigInt!
-
-  "  "
-  votingPower: BigDecimal!
-
-  " Link to metadata file "
-  metadata: String
-
-  " Proposal description text "
-  text: String
-
-  " Number of votes received by the proposal "
-  voteCount: BigInt!
-
-  " Number of positive votes (yes) received by the proposal "
-  positiveVoteCount: BigInt!
-
-  " Number of negative votes (no) received by the proposal "
-  negativeVoteCount: BigInt!
-
-  "  "
-  currentQuorum: BigDecimal!
-
-  "  "
-  currentSupport: BigDecimal!
-
-  "  "
-  stakedSupport: BigDecimal!
-
-  "  "
-  totalStaked: BigDecimal!
-
-  "  "
-  created: BigInt!
-
-  "  "
-  createdAtBlock: BigInt!
-
-  "  "
-  createdAtTransaction: Bytes!
-
-  "  "
-  updated: BigInt
-
-  "  "
-  updatedAtBlock: BigInt
-
-  "  "
-  updatedAtTransaction: Bytes
-
-  "  "
-  executed: BigInt
-
-  "  "
-  executedAtBlock: BigInt
-
-  "  "
-  executedAtTransaction: Bytes
-
-  "  "
-  votes: [ProposalVote!] @derivedFrom(field: "proposal")
+  pool: Pool!
+  timestamp: BigInt!
+  volume: BigDecimal!
 }
 
-type ProposalVote @entity {
+type HourlyVolume implements TradeVolume @entity {
   id: ID!
-  proposal: Proposal!
-  supports: Boolean!
-  stake: BigDecimal!
-  voter: Account!
+  pool: Pool!
+  timestamp: BigInt!
+  volume: BigDecimal!
+}
 
-  created: BigInt!
-  createdAtBlock: BigInt!
-  createdAtTransaction: Bytes!
+type WeeklyVolume implements TradeVolume @entity {
+  id: ID!
+  pool: Pool!
+  timestamp: BigInt!
+  volume: BigDecimal!
+}
+
+type LiquidityProvision @entity {
+  id: ID!
+  account: Account!
+  amount: BigInt!
 }
